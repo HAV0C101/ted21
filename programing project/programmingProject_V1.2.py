@@ -48,8 +48,13 @@ def clear():
 
 
 def printBoard():
-    for i in range(len(Board)):
-        print(Board[i])
+    mapString = ""
+    for line in Board:
+        mapLine = "\t\t\t"
+        for character in line:
+            mapLine += character+"   "
+        mapString += mapLine+"\n"
+    return mapString
 
 
 # main routine
@@ -63,6 +68,7 @@ while True:
     if userInput.lower() == "n":
         Board[curLoc[0]][curLoc[1]] = "*"
         curLoc[0] = curLoc[0] - 1
+        print(curLoc)
         Board[curLoc[0]][curLoc[1]] = "X"
         clear()
         printBoard()
@@ -83,4 +89,4 @@ while True:
         curLoc[1] = curLoc[1] - 1
         Board[curLoc[0]][curLoc[1]] = "X"
         clear()
-        printBoard()
+        print(printBoard())
