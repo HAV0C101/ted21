@@ -61,8 +61,9 @@ def printBoard():
 
 
 Board[5][5] = "X"
-for i in range(len(Board)):
-    print(Board[i])
+# for i in range(len(Board)):
+#     print(Board[i])
+printBoard()
 while True:
     userInput = input("Which direction do you wanna move in: ")
     if userInput.lower() == "n":
