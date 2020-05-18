@@ -4,7 +4,6 @@
 #define functions
 def  getDistances(userWeight):
     return (46*200)/userWeight
-
 #main routine
 print("For a 75kg person: %f cm" %getDistances(75))
 print("For a 60kg person: %f cm" %getDistances(60))
