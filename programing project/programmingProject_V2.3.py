@@ -39,13 +39,26 @@ def checkStop():
 
 
 def printBoard():
-    mapString = ""
+    # mapString = ""
+    LoC = 0
+    gridRow = 0
+    gridColum = 0
     for line in Board:
-        mapLine = ""
+        # mapLine = ""
         for character in line:
-            mapLine += character + "        "
-        mapString += mapLine + "" + "\n\n"
-    return mapString
+            print("added new image")
+            if character == "#":
+                app.addImage("Board" + str(LoC), "trash.gif", gridRow, gridColum)
+            else:
+                app.addImage("Board" + str(LoC), "grass.gif", gridRow, gridColum)
+
+            gridColum += 1
+            LoC += 1
+        gridRow += 1
+        gridColum = 0
+            # mapLine += character + "        "
+        # mapString += mapLine + "" + "\n\n"
+    # return mapString
 
 
 
@@ -180,6 +193,8 @@ app.bindKey("<Right>", keyPress)
 # User Inventory
 app.startLabelFrame("Inventory")
 
+app.stopLabelFrame()
+
 enemyNames = [["Dragon", "Orc", "Werewolf"], ["Of Trash", "Of Death", "Of Fire"]]
 enemyHealth = random.randint(30, 100)
 
@@ -190,12 +205,8 @@ app.startLabelFrame("Fight")
 app.addLabel(windowName, "You came across a " + enemyName)
 app.stopLabelFrame()
 app.stopSubWindow()
-
-
-app.stopLabelFrame()
-
 # Board
-app.addLabel("Board", printBoard(), 0, 1, 2, 2)
+# app.addLabel("Board", printBoard(), 0, 1, 2, 2)
 
 # app.addButton('QUIT', app.stop)
 # User Stats
@@ -204,5 +215,7 @@ app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nY
 # app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
 # app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
 app.stopLabelFrame()
-
+app.startLabelFrame("board")
+printBoard()
+app.stopLabelFrame()
 app.go()
