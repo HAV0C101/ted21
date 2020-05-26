@@ -34,6 +34,11 @@ Board = [
 
 
 # functions
+def checkStop():
+    return app.yesNoBox("Confirm Exit", "Are you sure you want to quit the game?")
+
+
+
 def printBoard():
     mapString = ""
     for line in Board:
@@ -55,39 +60,54 @@ def placeTrash():
 
 
 def keyPress(key):
+    global curTrash
     if key == "<Up>":
-        prevloc = [curLoc[0], curLoc[1]]
-        Board[curLoc[0]][curLoc[1]] = "O"
+        prevLoc = [curLoc[0], curLoc[1]]
+        Board[prevLoc[0]][prevLoc[1]] = "O"
         curLoc[0] = curLoc[0] - 1
-        print(curLoc)
+        if Board[curLoc[0]][curLoc[1]] == "#":
+            print("Trash collected")
+            curTrash += 1
+            app.setLabel("Statistics",
+                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
+        print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setLabel("Board", printBoard())
     if key == "<Down>":
-        prevloc = [curLoc[0], curLoc[1]]
-        if Board[curLoc[0]][curLoc[1]] == "#":
-            print("Picked Up Trash")
-        Board[curLoc[0]][curLoc[1]] = "O"
+        prevLoc = [curLoc[0], curLoc[1]]
+        Board[prevLoc[0]][prevLoc[1]] = "O"
         curLoc[0] = curLoc[0] + 1
-        print(curLoc)
+        if Board[curLoc[0]][curLoc[1]] == "#":
+            print("Trash collected")
+            curTrash += 1
+            app.setLabel("Statistics",
+                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
+        print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setLabel("Board", printBoard())
     if key == "<Right>":
-        prevloc = [curLoc[0], curLoc[1]]
-        if Board[curLoc[0]][curLoc[1]] == "#":
-            print("Picked Up Trash")
-        Board[curLoc[0]][curLoc[1]] = "O"
+        prevLoc = [curLoc[0], curLoc[1]]
+        Board[prevLoc[0]][prevLoc[1]] = "O"
         curLoc[1] = curLoc[1] + 1
-        print(curLoc)
+        if Board[curLoc[0]][curLoc[1]] == "#":
+            print("Trash collected")
+            curTrash += 1
+            app.setLabel("Statistics",
+                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
+        print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setLabel("Board", printBoard())
     if key == "<Left>":
-        prevloc = [curLoc[0], curLoc[1]]
-        if Board[curLoc[0]][curLoc[1]] == "#":
-            print("Picked Up Trash")
-        Board[curLoc[0]][curLoc[1]] = "O"
+        prevLoc = [curLoc[0], curLoc[1]]
+        Board[prevLoc[0]][prevLoc[1]] = "O"
         curLoc[1] = curLoc[1] - 1
-        print(curLoc)
+        if Board[curLoc[0]][curLoc[1]] == "#":
+            print("Trash collected")
+            curTrash += 1
+            app.setLabel("Statistics",
+                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
+        print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setLabel("Board", printBoard())
 
 
@@ -97,12 +117,13 @@ placeTrash()
 placeEnemys()
 
 # Setup GUI
-app = gui("Epic Quest of life", "1000x600")
+app = gui("Epic Quest of Trash", "1000x600")
 app.setResizable(canResize=False)
 app.setSticky("news")
 app.setExpand("both")
 print(curdir + "/assets/logo.png")
 app.setIcon(curdir + "/assets/logo.png")
+app.setStopFunction(checkStop)
 
 # Bind Keys
 app.bindKey("<Up>", keyPress)
@@ -117,12 +138,12 @@ app.stopLabelFrame()
 
 # Board
 app.addLabel("Board", printBoard(), 0, 1, 2, 2)
-
+# app.addButton('QUIT', app.stop)
 # User Stats
 app.startLabelFrame("Stats")
-app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(cur))
-app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
-app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
+app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+# app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
+# app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
 app.stopLabelFrame()
 
 # Start App
