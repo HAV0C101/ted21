@@ -1,9 +1,9 @@
-# ProgrammingProject_V
+# ProgrammingProject_V2.6
 # Cory Keastpither
 
 """
 Changelog
-v2.2
+v2.6
 reworked Board and created GUI
 
 """
@@ -131,8 +131,8 @@ def keyPress(key):
                 app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
-            app.setLabel("Statistics",
-                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+            # app.setLabel("Statistics",
+            #              "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
@@ -157,8 +157,8 @@ def keyPress(key):
                 app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
-            app.setLabel("Statistics",
-                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+            # app.setLabel("Statistics",
+            #              "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
@@ -183,8 +183,8 @@ def keyPress(key):
                 app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
-            app.setLabel("Statistics",
-                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+            # app.setLabel("Statistics",
+            #              "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
@@ -209,8 +209,8 @@ def keyPress(key):
                 app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
-            app.setLabel("Statistics",
-                         "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+            # app.setLabel("Statistics",
+            #              "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
@@ -227,9 +227,9 @@ placeEnemys()
 
 app = gui("Epic Quest of Trash", "1000x600")
 app.setImageLocation("assets")
-# app.setResizable(canResize=False)
-# app.setSticky("NEW")
-# app.setStretch("COLUMN")
+app.setResizable(canResize=False)
+app.setStretch("COLUMN")
+app.setSticky("NEW")
 print(curdir + "/assets/logo.png")
 app.setIcon("logo.png")
 app.setStopFunction(checkStop)
@@ -241,7 +241,7 @@ app.bindKey("<Left>", keyPress)
 app.bindKey("<Right>", keyPress)
 
 # User Inventory
-app.startLabelFrame("Inventory", row=0, column=0, rowspan=4)
+app.startLabelFrame("Inventory", row=0, column=0, rowspan=9)
 InvetoryString = "Items: \n"
 for Item in userStats[2]:
     InvetoryString = InvetoryString + Item + "\n"
@@ -257,10 +257,10 @@ enemyHealth = random.randint(30, 100)
 enemyName = enemyNames[0][random.randint(0, 2)] + " " + enemyNames[1][random.randint(0, 2)]
 windowName = "Fight"
 app.startSubWindow(windowName, modal=True)
-app.startLabelFrame("Fight")
+# app.startLabelFrame("Fight")
 app.addLabel(windowName, "You came across a " + enemyName)
-app.addNamedButton("CLOSE", "Demo", app.hideSubWindow)
-app.stopLabelFrame()
+
+# app.stopLabelFrame()
 
 app.stopSubWindow()
 # Board
@@ -268,12 +268,15 @@ app.stopSubWindow()
 
 # app.addButton('QUIT', app.stop)
 # User Stats
-app.startLabelFrame("Stats", row=4, column=0, colspan=6, rowspan=4
-                    )
-app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
-# app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
-# app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
-app.stopLabelFrame()
+# app.startLabelFrame("Stats", row=4, column=0, colspan=6, rowspan=4
+#                     )
+# app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
+# # app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
+# # app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
+# app.stopLabelFrame()
+app.addSplitMeter("progress", row=9, column=0, colspan=6, rowspan=1)
+app.setMeterFill("progress", ["green", "red"])
+app.setMeter("progress", 70)
 app.startLabelFrame("board", row=0, column=6, colspan=8, rowspan=10)
 app.setBg("#1a6b2e")
 printBoard()
@@ -281,7 +284,10 @@ printBoard()
 app.setPadding([0,0])
 app.setInPadding([20,20])
 app.stopLabelFrame()
-app.startLabelFrame("Messages", row=12, colspan=12, rowspan=2)
+app.startLabelFrame("Actions", row=13, colspan=8)
+app.addButton("test", press)
+app.stopLabelFrame()
+app.startLabelFrame("Messages", row=14, colspan=12, rowspan=4)
 app.addLabel("Message Label", messageString)
 app.stopLabelFrame()
 app.setBg("#1a6b2e")

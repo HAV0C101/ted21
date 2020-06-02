@@ -102,7 +102,7 @@ app.setResizable(canResize=False)
 app.setSticky("news")
 app.setExpand("both")
 print(curdir + "/assets/logo.png")
-app.setIcon(curdir + "/assets/logo.png")
+# app.setIcon(curdir + "/assets/logo.png")
 
 # Bind Keys
 app.bindKey("<Up>", keyPress)
