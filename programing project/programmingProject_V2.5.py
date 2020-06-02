@@ -14,9 +14,14 @@ from os import system, name, curdir
 from appJar import gui
 
 # variables
+messageString = "No Messages Yet!"
 curTrash = 0
-userStats = [100, True]
-# 0 = health 1 = isAlive
+userStats = [100,
+             True,
+             ["Sword Of Rebellion", "Axe Of Plenty"],
+             ["Potion of healing", "Potion of strength", "Potion of luck"]
+             ]
+# 0 = health 1 = isAlive 2 = Inventory 3 = potions
 curLoc = [5, 5]
 Board = [
     ["O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"],
@@ -46,15 +51,15 @@ def printBoard():
     for line in Board:
         # mapLine = ""
         for character in line:
-            print("added new image : " + "Board" + str(gridColum) + "," + str(gridRow))
+            print("added new image : " + "Board" + str(gridRow) + "," + str(gridColum))
             if character == "#":
-                app.addImage("Board" + str(gridColum) + "," + str(gridRow), "trash.gif", gridRow, gridColum)
+                app.addImage("Board" + str(gridRow) + "," + str(gridColum), "trash.gif", gridRow, gridColum)
 
             elif character == "X":
-                app.addImage("Board" + str(gridColum) + "," + str(gridRow), "Charater.gif", gridRow, gridColum)
+                app.addImage("Board" + str(gridRow) + "," + str(gridColum), "Charater.gif", gridRow, gridColum)
 
             else:
-                app.addImage("Board" + str(gridColum) + "," + str(gridRow), "grass.gif", gridRow, gridColum)
+                app.addImage("Board" + str(gridRow) + "," + str(gridColum), "grass.gif", gridRow, gridColum)
 
             gridColum += 1
             LoC += 1
@@ -66,12 +71,12 @@ def printBoard():
 
 
 def placeEnemys():
-    for i in range(1, 4):
+    for i in range(0, 4):
         Board[random.randint(0, 10)][random.randint(0, 10)] = "@"
 
 
 def placeTrash():
-    for i in range(1, 8):
+    for i in range(0, 8):
         Board[random.randint(0, 10)][random.randint(0, 10)] = "#"
 
 
@@ -85,6 +90,13 @@ def createFight():
     enemyHealth = random.randint(30, 100)
     global userStats
     enemyName = enemyNames[0][random.randint(0, 2)] + " " + enemyNames[1][random.randint(0, 2)]
+    global messageString
+    if messageString == "No Messages Yet!":
+        messageString = "You have come accross a " + enemyName
+        app.setLabel("Message Label", messageString)
+    else:
+        messageString = "You have come accross a " + enemyName
+        app.setLabel("Message Label", messageString)
     windowName = "Fight"
     app.startSubWindow(windowName, modal=True)
     app.startLabelFrame("Fight")
@@ -95,6 +107,7 @@ def createFight():
 
 
 def keyPress(key):
+    global messageString
     global curTrash
     if key == "<Up>":
         prevLoc = [curLoc[0], curLoc[1]]
@@ -108,6 +121,12 @@ def keyPress(key):
         if Board[curLoc[0]][curLoc[1]] == "@":
             createFight()
         if Board[curLoc[0]][curLoc[1]] == "#":
+            if messageString == "No Messages Yet!":
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
+            else:
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
             app.setLabel("Statistics",
@@ -115,7 +134,7 @@ def keyPress(key):
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
         app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
-
+        app.setImage("Board" + str(prevLoc[0]) + "," + str(prevLoc[1]), "grass.gif")
         # app.setLabel("Board", printBoard())
     if key == "<Down>":
         prevLoc = [curLoc[0], curLoc[1]]
@@ -128,13 +147,21 @@ def keyPress(key):
         if Board[curLoc[0]][curLoc[1]] == "@":
             createFight()
         if Board[curLoc[0]][curLoc[1]] == "#":
+            if messageString == "No Messages Yet!":
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
+            else:
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
             app.setLabel("Statistics",
                          "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
-        app.setLabel("Board", printBoard())
+        app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
+        app.setImage("Board" + str(prevLoc[0]) + "," + str(prevLoc[1]), "grass.gif")
+        # app.setLabel("Board", printBoard())
     if key == "<Right>":
         prevLoc = [curLoc[0], curLoc[1]]
         Board[prevLoc[0]][prevLoc[1]] = "O"
@@ -146,13 +173,21 @@ def keyPress(key):
         if Board[curLoc[0]][curLoc[1]] == "@":
             createFight()
         if Board[curLoc[0]][curLoc[1]] == "#":
+            if messageString == "No Messages Yet!":
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
+            else:
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
             app.setLabel("Statistics",
                          "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
-        app.setLabel("Board", printBoard())
+        app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
+        app.setImage("Board" + str(prevLoc[0]) + "," + str(prevLoc[1]), "grass.gif")
+        # app.setLabel("Board", printBoard())
     if key == "<Left>":
         prevLoc = [curLoc[0], curLoc[1]]
         Board[prevLoc[0]][prevLoc[1]] = "O"
@@ -164,13 +199,21 @@ def keyPress(key):
         if Board[curLoc[0]][curLoc[1]] == "@":
             createFight()
         if Board[curLoc[0]][curLoc[1]] == "#":
+            if messageString == "No Messages Yet!":
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
+            else:
+                messageString = "You Picked up a peice of trash!"
+                app.setLabel("Message Label", messageString)
             print("Trash collected")
             curTrash += 1
             app.setLabel("Statistics",
                          "Your current health is: " + str(userStats[0]) + "\nYour current trash is: " + str(curTrash))
         Board[curLoc[0]][curLoc[1]] = "X"
         print("Previous Location: " + str(prevLoc) + "\n New Location: " + str(curLoc))
-        app.setLabel("Board", printBoard())
+        app.setImage("Board" + str(curLoc[0]) + "," + str(curLoc[1]), "Charater.gif")
+        app.setImage("Board" + str(prevLoc[0]) + "," + str(prevLoc[1]), "grass.gif")
+        # app.setLabel("Board", printBoard())
 
 
 # Create Board
@@ -197,7 +240,13 @@ app.bindKey("<Right>", keyPress)
 
 # User Inventory
 app.startLabelFrame("Inventory", row=0, column=0, rowspan=4)
-app.addLabel("test")
+InvetoryString = "Items: \n"
+for Item in userStats[2]:
+    InvetoryString = InvetoryString + Item + "\n"
+InvetoryString += "\nPotions: \n"
+for Potion in userStats[3]:
+    InvetoryString = InvetoryString + Potion + "\n"
+app.addLabel("InventoryLabel", InvetoryString)
 app.stopLabelFrame()
 
 enemyNames = [["Dragon", "Orc", "Werewolf"], ["Of Trash", "Of Death", "Of Fire"]]
@@ -221,13 +270,14 @@ app.addLabel("Statistics", "Your current health is: " + str(userStats[0]) + "\nY
 # app.addLabel("CurTrash", "Your current trash is: " + str(curTrash))
 # app.addLabel("CurHealth", "Your current health is: " + str(userStats[0]))
 app.stopLabelFrame()
-app.startLabelFrame("board", row=0, column=6, colspan=8, rowspan=6)
+app.startLabelFrame("board", row=0, column=6, colspan=8, rowspan=10)
+app.setBg("#1a6b2e")
 printBoard()
 # app.addLabel("Board Zone")
 app.setPadding([0,0])
 app.setInPadding([20,20])
 app.stopLabelFrame()
-app.startLabelFrame("Messages", row=10, colspan=12, rowspan=2)
-app.addLabel("Message Zone")
+app.startLabelFrame("Messages", row=12, colspan=12, rowspan=2)
+app.addLabel("Message Label", messageString)
 app.stopLabelFrame()
 app.go()
