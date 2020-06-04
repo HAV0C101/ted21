@@ -42,6 +42,23 @@ Board = [
 
 
 # region functions
+def damage():
+    global userStats
+    userStats[0] -= int(100)
+    print(str(userStats[0]))
+    app.setMeter("Health", userStats[0])
+    if userStats[0] <= 0:
+        app.unbindKey("<Up>")
+        app.unbindKey("<Down>")
+        app.unbindKey("<Left>")
+        app.unbindKey("<Right>")
+        app.startSubWindow("Game Over", modal=True)
+        app.setSize(400, 200)
+        app.addLabel("Game Over")
+        app.stopSubWindow()
+        app.showSubWindow("Game Over")
+
+
 def checkStop():
     return app.yesNoBox("Confirm Exit", "Are you sure you want to quit the game?")
 
@@ -52,7 +69,6 @@ def printBoard():
     gridRow = 0
     gridColum = 0
     for line in Board:
-        # mapLine = ""
         for character in line:
             print("added new image : " + "Board" + str(gridRow) + "," + str(gridColum))
             if character == "#":
@@ -68,9 +84,6 @@ def printBoard():
             LoC += 1
         gridRow += 1
         gridColum = 0
-        # mapLine += character + "        "
-        # mapString += mapLine + "" + "\n\n"
-    # return mapString
 
 
 def placeEnemys():
@@ -277,7 +290,7 @@ app.stopLabelFrame()
 # region HealthBar
 app.addSplitMeter("Health", row=9, column=0, colspan=6, rowspan=1)
 app.setMeterFill("Health", ["green", "red"])
-app.setMeter("Health", 70)
+app.setMeter("Health", userStats[0])
 # endregion
 
 
@@ -295,6 +308,7 @@ app.stopLabelFrame()
 app.startLabelFrame("Actions", row=13, colspan=8)
 app.addButton("test", press, column=0, row=0)
 app.addButton("Create Fight", createFight, column=1, row=0)
+app.addButton("damage", damage, column=2, row=0)
 app.stopLabelFrame()
 # endregion
 
