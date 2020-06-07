@@ -55,6 +55,7 @@ def damage():
         app.startSubWindow("Game Over", modal=True)
         app.setSize(400, 200)
         app.addLabel("Game Over")
+        app.addButton("Quit Game", exit)
         app.stopSubWindow()
         app.showSubWindow("Game Over")
 
@@ -64,7 +65,6 @@ def checkStop():
 
 
 def printBoard():
-    # mapString = ""
     LoC = 0
     gridRow = 0
     gridColum = 0
@@ -102,7 +102,7 @@ def launch(win):
 
 def createFight():
     app.destroySubWindow("Fight")
-    enemyNames = [["Dragon", "Orc", "Werewolf"], ["Of ", "Of Death", "Of Fire"]]
+    enemyNames = [["Dragon", "Orc", "Werewolf"], ["Of Something", "Of Death", "Of Fire"]]
     enemyHealth = random.randint(30, 100)
     global userStats
     enemyName = enemyNames[0][random.randint(0, 2)] + " " + enemyNames[1][random.randint(0, 2)]
@@ -116,14 +116,28 @@ def createFight():
 
     windowName = "Fight"
     app.startSubWindow(windowName, modal=True)
-    app.setSize(400, 400)
+    app.setSize(400, 500)
     app.setStretch("COLUMN")
     app.setSticky("NEW")
     if not enemyName.find("Dragon"):
-        app.addImage("Dragonn","dragon.gif")
-    app.startLabelFrame("Fight")
+        app.startLabelFrame("Dragon", colspan=3)
+        app.addImage("Dragon", "dragon.gif")
+        app.stopLabelFrame()
+    if not enemyName.find("Werewolf"):
+        app.startLabelFrame("Werewolf", colspan=3)
+        app.addImage("werewolf", "werewolf.gif")
+        app.stopLabelFrame()
+    app.startLabelFrame("Fight", colspan=2)
     app.addLabel(windowName, "You came across a " + enemyName)
     app.stopLabelFrame()
+    app.addLabel("Your Health:", row=2, column=0)
+    app.addSplitMeter("Your Health", row=3, column=0)
+    app.setMeterFill("Your Health", ["green", "red"])
+    app.setMeter("Your Health", userStats[0])
+    app.addLabel("Enemy Health:", row=2, column=1)
+    app.addSplitMeter("Enemy Health", row=3, column=1)
+    app.setMeterFill("Enemy Health", ["green", "red"])
+    app.setMeter("Enemy Health", enemyHealth)
     app.stopSubWindow()
     app.showSubWindow(windowName)
 
@@ -261,7 +275,7 @@ app.setStretch("COLUMN")
 app.setSticky("NEW")
 print(curdir + "/assets/logo.png")
 app.setIcon("logo.png")
-app.setStopFunction(checkStop)
+# app.setStopFunction(checkStop)
 
 # Bind Keys
 app.bindKey("<Up>", keyPress)
