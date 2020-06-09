@@ -12,8 +12,11 @@ reworked Board and created GUI
 import random
 from os import system, name, curdir
 from appJar import gui
+import time
 
 # region variables
+enemyHealth = 0
+
 messageString = "No Messages Yet!"
 curTrash = 0
 userStats = [100,
@@ -42,9 +45,9 @@ Board = [
 
 
 # region functions
-def damage():
+def damage(amount):
     global userStats
-    userStats[0] -= int(100)
+    userStats[0] -= int(amount)
     print(str(userStats[0]))
     app.setMeter("Health", userStats[0])
     if userStats[0] <= 0:
@@ -101,6 +104,7 @@ def launch(win):
 
 
 def createFight():
+    global enemyHealth
     app.destroySubWindow("Fight")
     enemyNames = [["Dragon", "Orc", "Werewolf"], ["Of Something", "Of Death", "Of Fire"]]
     enemyHealth = random.randint(30, 100)
@@ -128,7 +132,7 @@ def createFight():
         app.addImage("werewolf", "werewolf.gif")
         app.stopLabelFrame()
     app.startLabelFrame("Fight", colspan=2)
-    app.addLabel(windowName, "You came across a " + enemyName)
+    app.addLabel("Fight Message", "You came across a " + enemyName)
     app.stopLabelFrame()
     app.addLabel("Your Health:", row=2, column=0)
     app.addSplitMeter("Your Health", row=3, column=0)
@@ -138,12 +142,75 @@ def createFight():
     app.addSplitMeter("Enemy Health", row=3, column=1)
     app.setMeterFill("Enemy Health", ["green", "red"])
     app.setMeter("Enemy Health", enemyHealth)
+    app.addButton("Fight", press, column=0, row=4)
+    app.addButton("Defend", press, column=0, row=5)
+    app.addButton("Heal", press, column=1, row=4)
+    app.addButton("Run", press, column=1, row=5)
     app.stopSubWindow()
     app.showSubWindow(windowName)
 
 
 def press(btn):
-    print(btn)
+    global enemyHealth
+    global userStats
+
+    def enemyAttack():
+        enemyChance = random.randint(0, 6)
+        # time.sleep(2)
+        if enemyChance > 2:
+            attackDamage = random.randint(10, 30)
+            damage(attackDamage)
+            app.setLabel("Message Label", "Enemy attacked you for " + str(attackDamage) + "hp")
+            app.setLabel("Fight Message", "Enemy attacked you for " + str(attackDamage) + "hp")
+            app.setMeter("Your Health", userStats[0])
+        if enemyChance <= 2:
+            app.setLabel("Message Label", "Enemy attack failed")
+            app.setLabel("Fight Message", "Enemy attack failed")
+
+    if btn == "Fight":
+        chance = random.randint(0, 10)
+        if chance > 4:
+            print("succsses")
+            attackAmount = random.randint(10, 30)
+            enemyHealth -= attackAmount
+            app.setLabel("Message Label", "Successfully hit Enemy For " + str(attackAmount) + "hp")
+            app.setLabel("Fight Message", "Successfully hit Enemy For " + str(attackAmount) + "hp")
+            app.setMeter("Enemy Health", enemyHealth)
+            if enemyHealth <= 0:
+                app.setLabel("Message Label", "Killed Enemy")
+                app.setLabel("Fight Message", "Killed Enemy")
+                app.hideSubWindow("Fight")
+            if enemyHealth >= 0:
+                enemyAttack()
+        if chance <= 4:
+            print("Attack failed")
+            app.setLabel("Message Label", "Attack Failed")
+            app.setLabel("Fight Message", "Attack Failed")
+            enemyAttack()
+    if btn == "Heal":
+        chance = random.randint(0, 10)
+        if chance > 4:
+            app.setLabel("Message Label", "Successfully Healed")
+            app.setLabel("Fight Message", "Successfully Healed")
+            userStats[0] = 100
+            app.setMeter("Your Health", userStats[0])
+            app.setMeter("Health", userStats[0])
+            enemyAttack()
+        if chance <= 4:
+            app.setLabel("Message Label", "Unable to heal")
+            app.setLabel("Fight Message", "Unable to heal")
+            enemyAttack()
+    if btn == "Run":
+        chance = random.randint(0, 10)
+        if chance > 4:
+            app.setLabel("Message Label", "Successfully Run")
+            app.hideSubWindow("Fight")
+        if chance <= 4:
+            app.setLabel("Message Label", "Unable to Run")
+            app.setLabel("Fight Message", "Unable to Run")
+            enemyAttack()
+    if btn == "Defend":
+        pass
 
 
 def keyPress(key):
@@ -322,7 +389,7 @@ app.stopLabelFrame()
 app.startLabelFrame("Actions", row=13, colspan=8)
 app.addButton("test", press, column=0, row=0)
 app.addButton("Create Fight", createFight, column=1, row=0)
-app.addButton("damage", damage, column=2, row=0)
+# app.addButton("damage", damage, column=2, row=0)
 app.stopLabelFrame()
 # endregion
 
